@@ -1,6 +1,39 @@
-Inverted Index is a minimal search engine. It consists of an Indexer and a Ranker.
-1)	Indexer: This part contains three solution files. In the first file first.py, a corpus consisting of almost 3500 web documents is scanned. When the file is run, it accepts the name of the directory containing the corpus as the command line argument. The documents, one by one are preprocessed. In preprocessing, all the web documents are stripped of all HTML tags. Then the text in the documents is tokenized. Then all the tokens are converted to lower case. Then all the stop words are removed from the file. Then all tokens are stemmed using KStem library. After tokenization is completed, four files are created as output, first one is docids.txt which contains all the filenames mapped to a unique integer and the second one is termids.txt which contains all the tokens distinctly mapped to a unique integer, and third one is termsPosition.txt which contains the docIds mapped to each termId and the last file which docInfo.txt contains docIds and the number of unique terms in it and the total count of all tokens that particular document. In the second file second.py, a term_index.txt file is created with the help of termsPosition.txt, using which contains the file position of each occurrence of each term in the collection. Delta encoding is applied to list to support efficient compression. In the thrid file thrid.py, a read menu is created which accepts command line arguments "--term term", term being replaced with token you want to search in the index with the help of termids.txt and term_index.txt. Menu displays the document id containing the term, term id, number of documents containing the term and the frequency of the term in the entire corpus.
+# Python Search Engine from Scratch
 
-2)	Ranker: This part contains the solution to the ranker. This file uses the index (termids.txt, docids.txt, term_index.txt, termsPositions.txt, docInfo.txt) created in the Indexer and to rank documents and create a search engine. Two files are additionally scanned. One is topics.xml which contains the queries to run in the search engine and other one is corpus.qrel which contains the relevance grades. Now a language model is created which is scored against Okapi BM25 scoring function and Dirichlet Smoothing and queries are run in this model.
+This repository contains the source code for a simple search engine built from the ground up in Python. The project was completed as part of my Information Retrieval course and is split into two main components: an **Indexer** and a **Ranker**.
 
-3)	Dependencies: Inverted index is implemented using python language. The system running this code should have Python3 installed. The dataset can be of any web documents. All the additional libraries used in this code are imported and are part of the solution; user will just have to run the file using proper python commands i.e. python3 script.py.
+## 🎯 Objective
+To implement the core components of a search engine, demonstrating an understanding of text processing, index construction, and statistical ranking models used to score and retrieve relevant documents.
+
+## ⚙️ Components
+
+### 1. The Indexer
+The `Indexer/` directory contains the scripts responsible for processing a raw document collection and building an efficient inverted index.
+
+* **Text Processing Pipeline**:
+    1.  Parses and extracts clean text from HTML files.
+    2.  Tokenizes text using regular expressions.
+    3.  Converts all tokens to lowercase.
+    4.  Removes common stopwords from a provided list.
+    5.  Applies the **Porter Stemmer** to reduce words to their root form.
+* **Inverted Index Construction**:
+    * Generates `docids.txt` and `termids.txt` to map documents and terms to unique integers.
+    * Creates a `term_index.txt` file containing the complete inverted lists.
+    * Implements **Delta Encoding** on DOCIDs and term positions within the inverted lists to ensure the index is compact and efficient.
+
+### 2. The Ranker
+The `Ranker/` directory contains the `solution.py` script, which uses the generated index to score and rank documents for a given set of queries (`topics.xml`).
+
+* **Query Processing**: Applies the same tokenization and stemming pipeline to user queries to ensure consistency with the indexed documents.
+* **Scoring Functions Implemented**:
+    * `--score TF`: Vector Space Model using **Okapi TF** weighting.
+    * `--score TF-IDF`: Vector Space Model using **TF-IDF** weighting.
+    * `--score BM25`: The probabilistic **Okapi BM25** ranking function.
+    * `--score JM`: A **Language Model** approach with **Jelinek-Mercer Smoothing**.
+
+## 📈 Evaluation
+The performance of each ranking model was evaluated against a ground-truth dataset (`corpus.qrel`) using the **Graded Average Precision (GAP)** metric. A detailed report comparing the effectiveness of each algorithm is included in the project documentation.
+
+## 🛠️ Tech Stack
+* **Language**: `Python`
+* **Key Libraries**: `NLTK` (for stemming and stopwords), standard file I/O and data structure libraries.
